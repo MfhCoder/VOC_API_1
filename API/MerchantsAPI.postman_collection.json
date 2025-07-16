@@ -1,0 +1,98 @@
+{
+  "info": {
+    "name": "Merchants API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Merchants",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/merchants?PageSize=10&PageIndex=1&Search=&Type=&Industry=&Location=&LastSurvey=&LastTicket=&LastTransaction=&LastFeedback=",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "merchants"],
+          "query": [
+            { "key": "PageSize", "value": "10" },
+            { "key": "PageIndex", "value": "1" },
+            { "key": "Search", "value": "" },
+            { "key": "Type", "value": "" },
+            { "key": "Industry", "value": "" },
+            { "key": "Location", "value": "" },
+            { "key": "LastSurvey", "value": "" },
+            { "key": "LastTicket", "value": "" },
+            { "key": "LastTransaction", "value": "" },
+            { "key": "LastFeedback", "value": "" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Export Merchants (CSV)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/merchants/export?PageSize=10&PageIndex=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "merchants", "export"],
+          "query": [
+            { "key": "PageSize", "value": "10" },
+            { "key": "PageIndex", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Export Merchants (PDF)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/merchants/export-pdf?PageSize=10&PageIndex=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "merchants", "export-pdf"],
+          "query": [
+            { "key": "PageSize", "value": "10" },
+            { "key": "PageIndex", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Merchant Industries",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/merchants/industries",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "merchants", "industries"]
+        }
+      }
+    },
+    {
+      "name": "Get Merchant Locations",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/merchants/locations",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "merchants", "locations"]
+        }
+      }
+    }
+  ]
+}
