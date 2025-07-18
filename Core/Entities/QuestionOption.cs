@@ -1,22 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Entities
 {
+    [Table("QuestionOptions")]
     public class QuestionOption : BaseEntity
     {
+        [Required]
+        [ForeignKey("Question")]
         public int QuestionId { get; set; }
-        public SurveyQuestion Question { get; set; }
 
+        public virtual SurveyQuestion Question { get; set; }
+
+        [Required]
+        [StringLength(500)]
         public string OptionText { get; set; }
+
+        [Required]
         public bool IsTerminate { get; set; } = false;
+
+        [Required]
         public bool TriggersBranch { get; set; } = false;
 
-        public ICollection<QuestionBranch> TriggeredBranches { get; set; }
-        public ICollection<FeedbackAnswer> Answers { get; set; }
+        public virtual ICollection<QuestionBranch> TriggeredBranches { get; set; }
+        public virtual ICollection<FeedbackAnswer> Answers { get; set; }
     }
 }

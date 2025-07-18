@@ -1,11 +1,24 @@
-﻿namespace Application.Dtos.UserDtos;
+﻿using Core.Entities;
+
+namespace Application.Dtos.UserDtos;
 
 public record UserDto(
-    string Id,
+    int Id,
     string Name,
     string Email,
     string Mobile,
     DateTime JoiningDate,
-    string Status,
-    string Role,
-    string Organization);
+    UserStatus Status,
+    string RoleName);
+
+//public class UserDto
+//{
+//    public int Id { get; set; }
+//    public string Name { get; set; }
+//    public string Email { get; set; }
+//    public string Mobile { get; set; }
+//    public DateTime JoiningDate { get; set; }
+//    public string UserStatus { get; set; }
+//    public string RoleName { get; set; }
+//}
+

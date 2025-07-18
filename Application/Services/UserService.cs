@@ -1,8 +1,11 @@
 ﻿using Application.Dtos.UserDtos;
 using Application.Interfaces;
+using Application.Specifications;
 using Application.Specifications.Users;
 using AutoMapper;
 using Core.Entities;
+using Core.Helpers;
+using QuestPDF.Infrastructure;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,13 +13,13 @@ namespace Application.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork unit;
     private readonly IMapper _mapper;
     private readonly IEmailService _emailService;
 
     public UserService(IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService)
     {
-        _unitOfWork = unitOfWork;
+        unit = unitOfWork;
         _mapper = mapper;
         _emailService = emailService;
     }
@@ -40,66 +43,79 @@ public class UserService : IUserService
 
     public async Task<UserDto> GetUserByIdAsync(int userId)
     {
-        var user = await _unitOfWork.Repository<User>().GetByIdAsync(userId);
+        var spec = new UserSpecification(userId);
+
+        var user = await unit.Repository<User>().GetEntityWithSpec(spec);
         return _mapper.Map<UserDto>(user);
     }
 
-    public async Task<UserDto> CreateUserAsync(CreateUserDto createDto)
+
+    public async Task<CreateUserResult> CreateUserAsync(CreateUserDto createDto)
     {
         var user = _mapper.Map<User>(createDto);
 
-        // Generate temporary password and hash it
-        var tempPassword = GenerateTemporaryPassword();
-        CreatePasswordHash(tempPassword, out var passwordHash, out var passwordSalt);
+        unit.Repository<User>().Add(user);
+        await unit.Complete();
 
-        user.PasswordHash = passwordHash;
-        user.PasswordSalt = passwordSalt;
+        string? warning = null;
 
-        _unitOfWork.Repository<User>().Add(user);
-        await _unitOfWork.Complete();
+        try
+        {
+            await _emailService.SendUserInvitationAsync(user.Email, user.Name);
+        }
+        catch (Exception ex)
+        {
+            warning = "User created, but failed to send invitation email.";
+        }
 
-        // Send invitation email
-        await _emailService.SendUserInvitationAsync(user.Email, tempPassword);
-
-        return _mapper.Map<UserDto>(user);
+        return new CreateUserResult
+        {
+            User = _mapper.Map<UserDto>(user),
+            Warning = warning
+        };
     }
 
     public async Task<UserDto> UpdateUserAsync(int userId, UpdateUserDto updateDto)
     {
-        var user = await _unitOfWork.Repository<User>().GetByIdAsync(userId);
+        var user = await unit.Repository<User>().GetByIdAsync(userId);
         _mapper.Map(updateDto, user);
 
-        _unitOfWork.Repository<User>().Update(user);
-        await _unitOfWork.Complete();
+        unit.Repository<User>().Update(user);
+        await unit.Complete();
 
         return _mapper.Map<UserDto>(user);
     }
 
-    //public async Task<bool> DeleteUserAsync(int userId)
-    //{
-    //    var user = await _unitOfWork.Repository<User>().GetByIdAsync(userId);
-    //    _unitOfWork.Repository<User>().Delete(user);
-    //    return await _unitOfWork.Complete();
-    //}
-
     public async Task<bool> ChangeUserStatusAsync(int userId, UserStatus status)
     {
-        var user = await _unitOfWork.Repository<User>().GetByIdAsync(userId);
+        var user = await unit.Repository<User>().GetByIdAsync(userId);
         user.Status = status;
 
-        _unitOfWork.Repository<User>().Update(user);
-        return await _unitOfWork.Complete();
+        unit.Repository<User>().Update(user);
+        return await unit.Complete();
     }
-
-    private string GenerateTemporaryPassword()
+    public StringBuilder GenerateCsv(IReadOnlyList<UserDto> merchants)
     {
-        return Guid.NewGuid().ToString("N")[..8]; // 8-character random password
+        var csv = new StringBuilder();
+       
+        csv.AppendLine("Id,Name,Email,Mobile,JoiningDate,Status,Role");
+
+        foreach (var m in merchants)
+        {
+            csv.AppendLine($"{m.Id},{CsvHelper.EscapeCsv(m.Name)},{CsvHelper.EscapeCsv(m.Email)},{CsvHelper.EscapeCsv(m.Mobile)},{CsvHelper.EscapeCsv(m.JoiningDate.ToString())},{m.Status},{m.RoleName}");
+        }
+
+        return csv;
     }
-
-    private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+    public async Task<byte[]> ExportUsersCSV(UserFilterParams specParams)
     {
-        using var hmac = new HMACSHA512();
-        passwordSalt = hmac.Key;
-        passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+     
+        var spec = new UserSpecification(specParams);
+        var user = await unit.Repository<User>().ListAsync(spec);
+        var userDto = _mapper.Map<IReadOnlyList<UserDto>>(user);
+        var csv = GenerateCsv(userDto);
+
+        var bytes = Encoding.UTF8.GetBytes(csv.ToString());
+        return bytes;
     }
 }

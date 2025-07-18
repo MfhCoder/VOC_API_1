@@ -1,6 +1,8 @@
 ﻿using API.RequestHelpers;
+using Application.Dtos.Merchant;
 using Application.Dtos.UserDtos;
 using Application.Interfaces;
+using Application.Services;
 using Application.Specifications;
 using Application.Specifications.Users;
 using AutoMapper;
@@ -31,7 +33,12 @@ public class UsersController : BaseApiController
     public async Task<ActionResult<Pagination<UserDto>>> GetUsers([FromQuery] UserFilterParams filterParams)
     {
         var spec = new UserSpecification(filterParams);
-        return await CreatePagedResult(unit.Repository<User>(), spec, filterParams.PageIndex, filterParams.PageSize);
+
+        return await CreatePagedResult<User, UserDto>(
+         unit.Repository<User>(),
+         spec,
+         filterParams.PageIndex,
+         filterParams.PageSize);
     }
 
     [HttpGet("{id}")]
@@ -42,12 +49,24 @@ public class UsersController : BaseApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createUserDto)
     {
-        var user = await _userService.CreateUserAsync(createUserDto);
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+        var result = await _userService.CreateUserAsync(createUserDto);
+
+        if (!string.IsNullOrEmpty(result.Warning))
+        {
+            return CreatedAtAction(
+                nameof(GetUser),
+                new { id = result.User.Id },
+                new { result.User, result.Warning });
+        }
+
+        return CreatedAtAction(
+            nameof(GetUser),
+            new { id = result.User.Id },
+            result.User);
     }
+
 
     [HttpPut("{id}")]
     public async Task<ActionResult<UserDto>> UpdateUser(int id, UpdateUserDto updateUserDto)
@@ -56,25 +75,16 @@ public class UsersController : BaseApiController
         return Ok(user);
     }
 
-    //[HttpDelete("{id}")]
-    //[Authorize(Roles = "Admin")]
-    //public async Task<IActionResult> DeleteUser(string id)
-    //{
-    //    await _userService.DeleteUserAsync(id);
-    //    return NoContent();
-    //}
+    [HttpPatch("{id}/ChangeStatus")]
+    public async Task<IActionResult> ChangeStatus(int id, UserStatus status)
+    {
+        await _userService.ChangeUserStatusAsync(id, status);
+        return NoContent();
+    }
 
-    //[HttpPost("{id}/deactivate")]
-    //public async Task<IActionResult> DeactivateUser(string id)
-    //{
-    //    await _userService.ChangeUserStatusAsync(id, UserStatus.Deactivated);
-    //    return NoContent();
-    //}
-
-    //[HttpPost("{id}/activate")]
-    //public async Task<IActionResult> ActivateUser(string id)
-    //{
-    //    await _userService.ChangeUserStatusAsync(id, UserStatus.Active);
-    //    return NoContent();
-    //}
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportUsers([FromQuery] UserFilterParams specParams)
+    {
+        return File(await _userService.ExportUsersCSV(specParams), "text/csv", "users.csv");
+    }
 }

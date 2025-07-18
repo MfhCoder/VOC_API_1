@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Entities
 {
+    [Table("SurveyFilters")]
     public class SurveyFilters : BaseEntity
-    {  
+    {
+        [Required]
+        [StringLength(100)]
         public string ColumnName { get; set; }
-        public string ColumnValue { get; set; }
-        public int SurveyId { get; set; }
-        public virtual Survey Survey { get; set; }
 
+        [Required]
+        [StringLength(500)]
+        public string ColumnValue { get; set; }
+
+        [Required]
+        [ForeignKey("Survey")]
+        public int SurveyId { get; set; }
+
+        public virtual Survey Survey { get; set; }
     }
 }

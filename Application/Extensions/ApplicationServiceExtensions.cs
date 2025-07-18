@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // Register services
             //services.AddScoped<IDeliveryService, DeliveryService>();
-            //services.AddScoped<IMerchantService, MerchantService>();
+            services.AddScoped<IMerchantService, MerchantService>();
             services.AddScoped<IUserService, UserService>();
             
             //// AutoMapper

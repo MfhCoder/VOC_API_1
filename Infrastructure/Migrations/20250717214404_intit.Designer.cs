@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(VocContext))]
-    [Migration("20250712145158_intit")]
+    [Migration("20250717214404_intit")]
     partial class intit
     {
         /// <inheritdoc />
@@ -34,12 +34,13 @@ namespace Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -62,7 +63,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("LongUrl")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.HasKey("Id");
 
@@ -79,11 +81,13 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -100,7 +104,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -116,11 +121,13 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -190,7 +197,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("ResponseText")
-                        .HasColumnType("text");
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<float?>("SentimentScore")
                         .HasColumnType("real");
@@ -233,7 +241,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Industry")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("LastEscalation")
                         .HasColumnType("timestamp with time zone");
@@ -251,32 +260,41 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Ledger")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("License")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Location")
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("MerchantSettlementBank")
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("PhoneNo")
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("PosMcc")
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Product")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Tenure")
-                        .HasColumnType("text");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.Property<int?>("TenureInDays")
                         .HasColumnType("integer");
@@ -288,10 +306,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<decimal?>("TransactionValue")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -308,11 +327,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Module");
+                    b.ToTable("Modules");
                 });
 
             modelBuilder.Entity("Core.Entities.Permission", b =>
@@ -328,7 +348,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("SurveyId")
                         .HasColumnType("integer");
@@ -339,7 +360,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("SurveyId");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Core.Entities.QuestionBranch", b =>
@@ -362,7 +383,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TriggerOptionId");
 
-                    b.ToTable("QuestionBranch");
+                    b.ToTable("QuestionBranches");
                 });
 
             modelBuilder.Entity("Core.Entities.QuestionOption", b =>
@@ -378,7 +399,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("OptionText")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
@@ -390,7 +412,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("QuestionOption");
+                    b.ToTable("QuestionOptions");
                 });
 
             modelBuilder.Entity("Core.Entities.QuestionSection", b =>
@@ -409,13 +431,14 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SurveyId");
 
-                    b.ToTable("QuestionSection");
+                    b.ToTable("QuestionSections");
                 });
 
             modelBuilder.Entity("Core.Entities.QuestionType", b =>
@@ -428,7 +451,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -448,11 +472,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Core.Entities.RolePermission", b =>
@@ -475,7 +500,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermission");
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Core.Entities.Survey", b =>
@@ -494,7 +519,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -530,14 +556,16 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("ScheduledTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("SurveyId")
                         .HasColumnType("integer");
@@ -574,7 +602,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("EncryptionToken")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("LinkId")
                         .HasColumnType("integer");
@@ -587,7 +616,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -610,11 +640,13 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("ColumnName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("ColumnValue")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("SurveyId")
                         .HasColumnType("integer");
@@ -640,14 +672,15 @@ namespace Infrastructure.Migrations
                     b.Property<int>("QuestionOrder")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("QuestionSectionId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("QuestionText")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("QuestionTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SectionId")
                         .HasColumnType("integer");
 
                     b.Property<int>("SurveyId")
@@ -655,9 +688,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionSectionId");
-
                     b.HasIndex("QuestionTypeId");
+
+                    b.HasIndex("SectionId");
 
                     b.HasIndex("SurveyId");
 
@@ -674,7 +707,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -691,26 +725,20 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("JoiningDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Mobile")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
@@ -728,13 +756,13 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Escalation", b =>
                 {
                     b.HasOne("Core.Entities.Department", "Department")
-                        .WithMany()
+                        .WithMany("Escalations")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Feedback", "Feedback")
-                        .WithMany()
+                        .WithMany("Escalations")
                         .HasForeignKey("FeedbackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -747,11 +775,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Feedback", b =>
                 {
                     b.HasOne("Core.Entities.SurveyDelivery", "Delivery")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("DeliveryId");
 
                     b.HasOne("Core.Entities.Merchant", "Merchant")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("MerchantId");
 
                     b.HasOne("Core.Entities.User", "Submitter")
@@ -759,7 +787,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("SubmittedBy");
 
                     b.HasOne("Core.Entities.Survey", "Survey")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -828,7 +856,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ModuleId");
 
                     b.HasOne("Core.Entities.Survey", "Survey")
-                        .WithMany()
+                        .WithMany("Permissions")
                         .HasForeignKey("SurveyId");
 
                     b.Navigation("Module");
@@ -912,7 +940,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.SurveyBatch", b =>
                 {
                     b.HasOne("Core.Entities.Channel", "Channel")
-                        .WithMany()
+                        .WithMany("SurveyBatches")
                         .HasForeignKey("ChannelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -924,7 +952,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Survey", "Survey")
-                        .WithMany()
+                        .WithMany("SurveyBatches")
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -949,13 +977,13 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.DeliveryLink", "Link")
-                        .WithMany()
+                        .WithMany("SurveyDeliveries")
                         .HasForeignKey("LinkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Merchant", "Merchant")
-                        .WithMany()
+                        .WithMany("SurveyDeliveries")
                         .HasForeignKey("MerchantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -970,7 +998,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.SurveyFilters", b =>
                 {
                     b.HasOne("Core.Entities.Survey", "Survey")
-                        .WithMany()
+                        .WithMany("SurveyFilters")
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -980,23 +1008,25 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.SurveyQuestion", b =>
                 {
-                    b.HasOne("Core.Entities.QuestionSection", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("QuestionSectionId");
-
                     b.HasOne("Core.Entities.QuestionType", "QuestionType")
                         .WithMany("Questions")
                         .HasForeignKey("QuestionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Core.Entities.QuestionSection", "Section")
+                        .WithMany("Questions")
+                        .HasForeignKey("SectionId");
+
                     b.HasOne("Core.Entities.Survey", "Survey")
-                        .WithMany()
+                        .WithMany("Questions")
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("QuestionType");
+
+                    b.Navigation("Section");
 
                     b.Navigation("Survey");
                 });
@@ -1012,11 +1042,35 @@ namespace Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Core.Entities.Channel", b =>
+                {
+                    b.Navigation("SurveyBatches");
+                });
+
+            modelBuilder.Entity("Core.Entities.DeliveryLink", b =>
+                {
+                    b.Navigation("SurveyDeliveries");
+                });
+
+            modelBuilder.Entity("Core.Entities.Department", b =>
+                {
+                    b.Navigation("Escalations");
+                });
+
             modelBuilder.Entity("Core.Entities.Feedback", b =>
                 {
                     b.Navigation("Answers");
 
+                    b.Navigation("Escalations");
+
                     b.Navigation("FeedbackTags");
+                });
+
+            modelBuilder.Entity("Core.Entities.Merchant", b =>
+                {
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("SurveyDeliveries");
                 });
 
             modelBuilder.Entity("Core.Entities.Module", b =>
@@ -1055,12 +1109,27 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Survey", b =>
                 {
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("Permissions");
+
                     b.Navigation("QuestionSections");
+
+                    b.Navigation("Questions");
+
+                    b.Navigation("SurveyBatches");
+
+                    b.Navigation("SurveyFilters");
                 });
 
             modelBuilder.Entity("Core.Entities.SurveyBatch", b =>
                 {
                     b.Navigation("SurveyDelivery");
+                });
+
+            modelBuilder.Entity("Core.Entities.SurveyDelivery", b =>
+                {
+                    b.Navigation("Feedbacks");
                 });
 
             modelBuilder.Entity("Core.Entities.SurveyQuestion", b =>

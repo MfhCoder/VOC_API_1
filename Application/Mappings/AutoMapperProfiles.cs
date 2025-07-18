@@ -3,11 +3,6 @@ using Application.Dtos.RoleDtos;
 using Application.Dtos.UserDtos;
 using AutoMapper;
 using Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Mappings
 {
@@ -21,10 +16,11 @@ namespace Application.Mappings
             // User mappings
             CreateMap<User, UserDto>()
               .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
-              .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name));
+              .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name)).ReverseMap();
+
             CreateMap<CreateUserDto, User>()
-             .ForMember(dest => dest.JoiningDate, opt => opt.MapFrom(_ => DateTime.UtcNow))
-             .ForMember(dest => dest.Status, opt => opt.MapFrom(_ => "Active"));
+             .ForMember(dest => dest.JoiningDate, opt => opt.MapFrom(_ => DateTime.UtcNow));
+
             CreateMap<UpdateUserDto, User>();
 
             // Role mappings

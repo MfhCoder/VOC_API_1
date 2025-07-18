@@ -1,10 +1,12 @@
-﻿namespace Application.Dtos.UserDtos;
+﻿using Core.Entities;
+
+namespace Application.Dtos.UserDtos;
 
 public record UpdateUserDto(
     string Name,
     string Mobile,
     int? RoleId,
-    string Status);
+    UserStatus Status);
 
 //public record UserFilterParams : PaginationParams
 //{

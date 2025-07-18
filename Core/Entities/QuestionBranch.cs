@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Entities
 {
+    [Table("QuestionBranches")]
     public class QuestionBranch : BaseEntity
     {
+        [Required]
+        [ForeignKey("ParentQuestion")]
         public int ParentQuestionId { get; set; }
-        public SurveyQuestion ParentQuestion { get; set; }
+
+        public virtual SurveyQuestion ParentQuestion { get; set; }
+
+        [ForeignKey("TriggerOption")]
         public int? TriggerOptionId { get; set; }
-        public QuestionOption TriggerOption { get; set; }
+
+        public virtual QuestionOption TriggerOption { get; set; }
     }
 }

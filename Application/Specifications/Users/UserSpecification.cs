@@ -42,6 +42,10 @@ namespace Application.Specifications.Users
             }
 
         }
+        public UserSpecification(int id) : base(x => x.Id == id)
+        {
+            AddInclude(x => x.Role);
+        }
 
         //public UserSpecification(Expression<Func<User, bool>> criteria)
         //: base(criteria)

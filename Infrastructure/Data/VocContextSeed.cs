@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using Core.Entities;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
@@ -9,18 +9,41 @@ public class VocContextSeed
 {
     public static async Task SeedAsync(VocContext context)
     {
-        //if (!userManager.Users.Any(x => x.Email == "admin@test.com"))
-        //{
-        //    var user = new User
-        //    {
-        //        Email = "admin@test.com",
-        //    };
 
-        //    await userManager.CreateAsync(user, "Pa$$w0rd");
-        //    await userManager.AddToRoleAsync(user, "Admin");
-        //}
+        // Check if super admin role exists
+        if (!await context.Role.AnyAsync(r => r.Name == "SuperAdmin"))
+        {
+            // Create super admin role first
+            var superAdminRole = new Role
+            {
+                Name = "SuperAdmin",
+                CreatedDate = DateTime.UtcNow
+            };
+            context.Role.Add(superAdminRole);
+            await context.SaveChangesAsync();
 
-        var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            // Now create super admin user
+            var superAdmin = new User
+            {
+                Name = "Super Admin",
+                Email = "superadmin@voc.com",
+                Mobile = "+1234567890",
+                JoiningDate = DateTime.UtcNow,
+                Status = UserStatus.Active,
+                RoleId = superAdminRole.Id
+            };
+
+            // Hash password
+            //superAdmin.PasswordHash = passwordHasher.HashPassword(superAdmin, "Admin@123");
+
+            context.User.Add(superAdmin);
+            await context.SaveChangesAsync();
+
+            // Update role's CreatedBy
+            //superAdminRole.Create = superAdmin.UserId;
+            await context.SaveChangesAsync();
+        }
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         if (!context.Merchants.Any())
         {

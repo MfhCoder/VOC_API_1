@@ -8,6 +8,6 @@ namespace Application.Services
 {
     public interface IEmailService
     {
-        public Task SendUserInvitationAsync(string email, string temporaryPassword);
+        public Task SendUserInvitationAsync(string email, string name);
     }
 }
